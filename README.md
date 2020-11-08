@@ -1,7 +1,7 @@
 # ShapeFromShading
 A convolutional neural network that takes an image as imput and produces a depth map. The network is trained on the RGB-D object dataset from University of Washington ([http://rgbd-dataset.cs.washington.edu/dataset/](http://rgbd-dataset.cs.washington.edu/dataset/)).
 
-This is a toy project I wrote to practive with tensorflow. The code is under BSD licesnes however the provided weights as well as the rgbd dataset from the University of Washington are provided only for non-commercial usage.
+This is a toy project I wrote to practive with tensorflow. The code is under BSD licesnes however the weights file supplied with the code as well as the rgbd dataset from the University of Washington are provided only for non-commercial usage.
 
 ![](shape_from_shading.png)
 

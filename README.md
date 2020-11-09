@@ -13,9 +13,9 @@ This is a toy project I wrote to practive with tensorflow. The code is under BSD
 
 ## Test An Image
     python3 test_image.py <path_to_input_image> <path_to_weights>
-Example using the trained weights provided with the code:
+Example using the trained weights and the image provided with the code:
     
-    python3 test_image.py ~/apple.png weights.h5py
+    python3 test_image.py apple.jpg weights.h5py
 
 ## Training The Network Yourself
 1. Download the rgbd object dataset from [here](http://rgbd-dataset.cs.washington.edu/dataset.html). (Get the zip file of the cropped objects and extract it)

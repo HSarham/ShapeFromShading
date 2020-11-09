@@ -5,7 +5,7 @@ import sys
 
 d_file = h5py.File(sys.argv[1], 'r')
 
-weights, sess = model.train(d_file, model.weights, 64)
+weights, sess = model.train(d_file)
 
 w_file = h5py.File(sys.argv[2], 'w')
 for name in model.weight_names:

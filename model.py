@@ -11,49 +11,50 @@ weight_names = ["W11", "W12", "W21", "W22", "W31", "W32", "W41", "W42", "W51", "
 
 tf.random.set_random_seed(5678)
 
-weights = {}
-
-
 def init_tf_var(name, shape, Ws):
     Ws[name] = tf.get_variable(name, shape, initializer=tf.contrib.layers.xavier_initializer(seed=1))
 
+def init_weights():
+    weights = {}
 
-init_tf_var("W11", [3, 3, 3, 32], weights)
-init_tf_var("W12", [3, 3, 32, 32], weights)
+    init_tf_var("W11", [3, 3, 3, 32], weights)
+    init_tf_var("W12", [3, 3, 32, 32], weights)
 
-init_tf_var("W21", [3, 3, 32, 64], weights)
-init_tf_var("W22", [3, 3, 64, 64], weights)
+    init_tf_var("W21", [3, 3, 32, 64], weights)
+    init_tf_var("W22", [3, 3, 64, 64], weights)
 
-init_tf_var("W31", [3, 3, 64, 128], weights)
-init_tf_var("W32", [3, 3, 128, 128], weights)
+    init_tf_var("W31", [3, 3, 64, 128], weights)
+    init_tf_var("W32", [3, 3, 128, 128], weights)
 
-init_tf_var("W41", [3, 3, 128, 256], weights)
-init_tf_var("W42", [3, 3, 256, 256], weights)
+    init_tf_var("W41", [3, 3, 128, 256], weights)
+    init_tf_var("W42", [3, 3, 256, 256], weights)
 
-init_tf_var("W51", [3, 3, 256, 512], weights)
-init_tf_var("W52", [3, 3, 512, 512], weights)
+    init_tf_var("W51", [3, 3, 256, 512], weights)
+    init_tf_var("W52", [3, 3, 512, 512], weights)
 
-init_tf_var("WU5", [2, 2, 512, 256], weights)
+    init_tf_var("WU5", [2, 2, 512, 256], weights)
 
-init_tf_var("W61", [3, 3, 512, 256], weights)
-init_tf_var("W62", [3, 3, 256, 256], weights)
+    init_tf_var("W61", [3, 3, 512, 256], weights)
+    init_tf_var("W62", [3, 3, 256, 256], weights)
 
-init_tf_var("WU6", [2, 2, 256, 128], weights)
+    init_tf_var("WU6", [2, 2, 256, 128], weights)
 
-init_tf_var("W71", [3, 3, 256, 128], weights)
-init_tf_var("W72", [3, 3, 128, 128], weights)
+    init_tf_var("W71", [3, 3, 256, 128], weights)
+    init_tf_var("W72", [3, 3, 128, 128], weights)
 
-init_tf_var("WU7", [2, 2, 128, 64], weights)
+    init_tf_var("WU7", [2, 2, 128, 64], weights)
 
-init_tf_var("W81", [3, 3, 128, 64], weights)
-init_tf_var("W82", [3, 3, 64, 64], weights)
+    init_tf_var("W81", [3, 3, 128, 64], weights)
+    init_tf_var("W82", [3, 3, 64, 64], weights)
 
-init_tf_var("WU8", [2, 2, 64, 32], weights)
+    init_tf_var("WU8", [2, 2, 64, 32], weights)
 
-init_tf_var("W91", [3, 3, 64, 32], weights)
-init_tf_var("W92", [3, 3, 32, 32], weights)
+    init_tf_var("W91", [3, 3, 64, 32], weights)
+    init_tf_var("W92", [3, 3, 32, 32], weights)
 
-init_tf_var("W93", [1, 1, 32, 1], weights)
+    init_tf_var("W93", [1, 1, 32, 1], weights)
+
+    return weights
 
 
 def double_conv2d(input_, W1, W2):
@@ -115,9 +116,11 @@ def cost_function(in_Y, in_ff):
     return tf.reduce_mean(tf.abs(diff[mask]))
 
 
-def train(dataset, Ws, minibatch_size=64, num_iters=20):
+def train(dataset, minibatch_size=64, num_iters=5):
     X = tf.placeholder(tf.float32, shape=[None, 128, 128, 3], name='X')
     Y = tf.placeholder(tf.float32, shape=[None, 128, 128, 1], name='Y')
+
+    Ws = init_weights()
 
     ff = feed_forward(X, Ws)
     cost = cost_function(Y, ff)
@@ -134,7 +137,7 @@ def train(dataset, Ws, minibatch_size=64, num_iters=20):
     num_minibatches = int((num_elems - num_elems % minibatch_size) / minibatch_size + 1)
 
     for i in range(num_iters):
-        log_file = open("/home/hamid/model_log_"+str(i)+".txt", "w")
+        log_file = open("model_log_"+str(i)+".txt", "w")
         before = time.time()
         for minibatch_index in range(num_minibatches):
             start_index = minibatch_index * minibatch_size
@@ -150,7 +153,7 @@ def train(dataset, Ws, minibatch_size=64, num_iters=20):
         duration = time.time()-before
         log_file.write("time passed (seconds): "+str(duration)+"\n")
 
-        w_file = h5py.File('/home/hamid/weights_'+str(i)+'.h5py', 'w')
+        w_file = h5py.File('weights_'+str(i)+'.h5py', 'w')
         for name in weight_names:
             w_file.create_dataset(name, data=np.array(weights[name].eval(session=sess)))
 

@@ -155,7 +155,7 @@ def train(dataset, minibatch_size=64, num_iters=5):
 
         w_file = h5py.File('weights_'+str(i)+'.h5py', 'w')
         for name in weight_names:
-            w_file.create_dataset(name, data=np.array(weights[name].eval(session=sess)))
+            w_file.create_dataset(name, data=np.array(Ws[name].eval(session=sess)))
 
         w_file.close()
         log_file.close()
